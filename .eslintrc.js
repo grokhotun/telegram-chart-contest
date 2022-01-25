@@ -25,5 +25,9 @@ module.exports = {
         ts: 'never',
       },
     ],
+    'no-param-reassign': [2, { props: false }],
+    'no-unused-vars': 'warn',
+    'no-plusplus': 'off',
+    'no-restricted-syntax': 'off',
   },
 };
