@@ -1,7 +1,5 @@
 import { getChartData } from '@/data';
-import {
-  ChartData, Options, Names, Types, Chart, MouseProxy,
-} from '@/types';
+import { ChartData, Options, Names, Types, Chart, MouseProxy } from '@/types';
 import {
   PADDING,
   WIDTH,
@@ -17,12 +15,20 @@ import {
   CIRCLE_RADIUS,
 } from '@/constants';
 import { toCoords, toDate } from '@/utils';
+import '@/styles.scss';
 
-const telegramChart = chart(document.getElementById('chart') as HTMLCanvasElement, getChartData());
+const telegramChart = chart(
+  document.getElementById('chart') as HTMLCanvasElement,
+  getChartData()
+);
 
 telegramChart.init();
 
-function drawLine(ctx: CanvasRenderingContext2D, coords: number[][], options: Options) {
+function drawLine(
+  ctx: CanvasRenderingContext2D,
+  coords: number[][],
+  options: Options
+) {
   const { color, lineWidth } = options;
 
   ctx.beginPath();
@@ -37,7 +43,11 @@ function drawLine(ctx: CanvasRenderingContext2D, coords: number[][], options: Op
   ctx.closePath();
 }
 
-function drawCircle(ctx: CanvasRenderingContext2D, [x, y]: [number, number], color: string) {
+function drawCircle(
+  ctx: CanvasRenderingContext2D,
+  [x, y]: [number, number],
+  color: string
+) {
   ctx.beginPath();
   ctx.strokeStyle = color;
   ctx.fillStyle = '#fff';
@@ -47,7 +57,10 @@ function drawCircle(ctx: CanvasRenderingContext2D, [x, y]: [number, number], col
   ctx.closePath();
 }
 
-function computeBoundaries({ columns, types }: Pick<ChartData, 'columns' | 'types'>) {
+function computeBoundaries({
+  columns,
+  types,
+}: Pick<ChartData, 'columns' | 'types'>) {
   const data = columns
     .filter((column) => types[column[0] as keyof Types] === 'line')
     .map((array) => array.filter(Number) as number[])
@@ -81,7 +94,12 @@ function yAxis(ctx: CanvasRenderingContext2D, yMin: number, yMax: number) {
   ctx.closePath();
 }
 
-function xAxis(ctx: CanvasRenderingContext2D, data: (string | number)[], xRatio: number, { mouse }: MouseProxy) {
+function xAxis(
+  ctx: CanvasRenderingContext2D,
+  data: (string | number)[],
+  xRatio: number,
+  { mouse }: MouseProxy
+) {
   const step = Math.round(data.length / LABELS_COUNT);
 
   ctx.beginPath();
@@ -106,9 +124,12 @@ function xAxis(ctx: CanvasRenderingContext2D, data: (string | number)[], xRatio:
   ctx.closePath();
 }
 
-function chart(canvas: HTMLCanvasElement, { columns, types, colors }: ChartData): {
-  init: () => void,
-  destroy: () => void
+function chart(
+  canvas: HTMLCanvasElement,
+  { columns, types, colors }: ChartData
+): {
+  init: () => void;
+  destroy: () => void;
 } {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
@@ -118,20 +139,23 @@ function chart(canvas: HTMLCanvasElement, { columns, types, colors }: ChartData)
   canvas.width = DPI_WIDTH;
   canvas.height = DPI_HEIGHT;
 
-  const proxy = new Proxy<MouseProxy>({
-    mouse: {
-      x: null,
+  const proxy = new Proxy<MouseProxy>(
+    {
+      mouse: {
+        x: null,
+      },
     },
-  }, {
-    set(...args) {
-      const result = Reflect.set(...args);
-      raf = requestAnimationFrame(paint);
-      return result;
-    },
-  });
+    {
+      set(...args) {
+        const result = Reflect.set(...args);
+        raf = requestAnimationFrame(paint);
+        return result;
+      },
+    }
+  );
 
   function clear() {
-    (ctx).clearRect(0, 0, DPI_WIDTH, DPI_HEIGHT);
+    ctx.clearRect(0, 0, DPI_WIDTH, DPI_HEIGHT);
   }
 
   function paint() {
@@ -141,11 +165,13 @@ function chart(canvas: HTMLCanvasElement, { columns, types, colors }: ChartData)
     const yRatio = VIEW_HEIGHT / (yMax - yMin);
     const xRatio = VIEW_WIDTH / (columns[0].length - 2);
 
-    const yData = columns
-      .filter((column) => types[column[0] as keyof Types] === 'line');
+    const yData = columns.filter(
+      (column) => types[column[0] as keyof Types] === 'line'
+    );
 
-    const xData = columns
-      .filter((column) => types[column[0] as keyof Types] !== 'line')[0];
+    const xData = columns.filter(
+      (column) => types[column[0] as keyof Types] !== 'line'
+    )[0];
 
     yAxis(ctx, yMin, yMax);
     xAxis(ctx, xData, xRatio, proxy);
