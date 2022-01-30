@@ -19,5 +19,9 @@ export type Options = {
 export type MouseProxy = {
   mouse: {
     x: number | null;
+    tooltip: {
+      top: number | null;
+      left: number | null;
+    };
   };
 };
