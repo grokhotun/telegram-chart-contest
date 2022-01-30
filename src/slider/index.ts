@@ -1,0 +1,1 @@
+export { chartSlider } from './slider';

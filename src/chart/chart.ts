@@ -11,7 +11,7 @@ import {
   STEP,
   LABELS_COUNT,
   Y_AXIS_STYLES,
-} from '@/constants';
+} from '@/chart/constants';
 import {
   toCoords,
   toDate,
@@ -22,19 +22,36 @@ import {
   css,
 } from '@/utils';
 import { tooltip } from '@/tooltip';
+import { chartSlider } from '@/slider';
 
 export function chart(
   root: HTMLElement,
-  { columns, types, colors, names }: ChartData
+  chartData: ChartData
 ): {
   init: () => void;
   destroy: () => void;
 } {
+  const { columns, types, colors, names } = chartData;
+
   const canvas = root.querySelector('canvas') as HTMLCanvasElement;
   const canvasTooltip = tooltip(
     root.querySelector('[data-element="tooltip"]') as HTMLElement
   );
+  const slider = chartSlider(
+    root.querySelector('[data-element="slider"]') as HTMLElement,
+    chartData,
+    { dpiWidth: DPI_WIDTH }
+  );
+
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+  css(canvas, {
+    width: `${WIDTH}px`,
+    height: `${HEIGHT}px`,
+  });
+
+  canvas.width = DPI_WIDTH;
+  canvas.height = DPI_HEIGHT;
 
   const yData = columns.filter(
     (column) => types[column[0] as keyof Types] === 'line'
@@ -45,14 +62,6 @@ export function chart(
   )[0];
 
   let raf: number;
-
-  css(canvas, {
-    width: `${WIDTH}px`,
-    height: `${HEIGHT}px`,
-  });
-
-  canvas.width = DPI_WIDTH;
-  canvas.height = DPI_HEIGHT;
 
   const proxy = new Proxy<MouseProxy>(
     {
@@ -87,7 +96,7 @@ export function chart(
     yAxis(yMin, yMax);
     xAxis(xData, xRatio);
 
-    const chartData = yData.map<Chart>((column) => {
+    const mappedChartData = yData.map<Chart>((column) => {
       const columnName = column[0] as keyof Names;
       const color = colors[columnName];
 
@@ -102,7 +111,7 @@ export function chart(
       };
     });
 
-    chartData.forEach(({ color, coords }) => {
+    mappedChartData.forEach(({ color, coords }) => {
       drawLine(ctx, coords, { lineWidth: 4, color });
 
       for (const [x, y] of coords) {

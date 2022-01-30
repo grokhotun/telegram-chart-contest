@@ -4,7 +4,7 @@ import {
   DPI_WIDTH,
   MONTHS,
   PADDING,
-} from '@/constants';
+} from '@/chart/constants';
 import { ChartData, Options, Types } from '@/types';
 
 export function toDate(timestamp: number) {
