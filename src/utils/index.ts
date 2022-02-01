@@ -1,10 +1,4 @@
-import {
-  CIRCLE_RADIUS,
-  DPI_HEIGHT,
-  DPI_WIDTH,
-  MONTHS,
-  PADDING,
-} from '@/chart/constants';
+import { CIRCLE_RADIUS, DPI_WIDTH, MONTHS } from '@/chart/constants';
 import { ChartData, Options, Types } from '@/types';
 
 export function toDate(timestamp: number) {
@@ -12,9 +6,18 @@ export function toDate(timestamp: number) {
   return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
 }
 
-export function toCoords(x: number, y: number, xRatio: number, yRatio: number) {
+export function toCoords(
+  x: number,
+  y: number,
+  {
+    xRatio,
+    yRatio,
+    dpiHeight,
+    padding,
+  }: { dpiHeight: number; padding: number; xRatio: number; yRatio: number }
+) {
   const xCoord = Math.floor(x * xRatio);
-  const yCoord = Math.floor(DPI_HEIGHT - PADDING - y * yRatio);
+  const yCoord = Math.floor(dpiHeight - padding - y * yRatio);
 
   return [xCoord, yCoord];
 }

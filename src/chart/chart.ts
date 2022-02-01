@@ -103,7 +103,14 @@ export function chart(
       const coords = column
         // @ts-ignore
         .filter<number>(Number)
-        .map((y, i) => toCoords(i, y, xRatio, yRatio));
+        .map((y, i) =>
+          toCoords(i, y, {
+            xRatio,
+            yRatio,
+            dpiHeight: DPI_HEIGHT,
+            padding: PADDING,
+          })
+        );
 
       return {
         coords,
