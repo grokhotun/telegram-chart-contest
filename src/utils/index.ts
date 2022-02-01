@@ -14,10 +14,17 @@ export function toCoords(
     yRatio,
     dpiHeight,
     padding,
-  }: { dpiHeight: number; padding: number; xRatio: number; yRatio: number }
+    yMin,
+  }: {
+    dpiHeight: number;
+    padding: number;
+    xRatio: number;
+    yRatio: number;
+    yMin: number;
+  }
 ) {
   const xCoord = Math.floor(x * xRatio);
-  const yCoord = Math.floor(dpiHeight - padding - y * yRatio);
+  const yCoord = Math.floor(dpiHeight - padding - (y - yMin) / yRatio);
 
   return [xCoord, yCoord];
 }
@@ -80,4 +87,12 @@ export function css(
   styles: Partial<CSSStyleDeclaration>
 ) {
   Object.assign(element.style, styles);
+}
+
+export function computeXRatio(width: number, length: number) {
+  return width / (length - 2);
+}
+
+export function computeYRatio(height: number, max: number, min: number) {
+  return (max - min) / height;
 }

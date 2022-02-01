@@ -1,5 +1,12 @@
 import { Chart, ChartData, Names, Types } from '@/types';
-import { computeBoundaries, css, drawLine, toCoords } from '@/utils';
+import {
+  computeBoundaries,
+  computeXRatio,
+  computeYRatio,
+  css,
+  drawLine,
+  toCoords,
+} from '@/utils';
 
 import { DPI_HEIGHT, HEIGHT } from './constants';
 
@@ -16,6 +23,7 @@ export function chartSlider(
 ) {
   const width = dpiWidth / 2;
   const minWidth = width * 0.05;
+  let dispatch: Callback | null = null;
 
   const canvas = root.querySelector('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -31,6 +39,10 @@ export function chartSlider(
     width: `${width}px`,
     height: `${HEIGHT}px`,
   });
+
+  function update() {
+    dispatch?.(getPosition());
+  }
 
   function getPosition() {
     const left = parseInt($left.style.width, 10);
@@ -62,6 +74,7 @@ export function chartSlider(
           const right = width - left - dimensions.width;
 
           setPosition(left, right);
+          update();
         };
 
         document.onmouseup = () => {
@@ -84,11 +97,14 @@ export function chartSlider(
             const right = width - (dimensions.width - delta) - dimensions.left;
             setPosition(dimensions.left, right);
           }
+
+          update();
         };
 
         document.onmouseup = () => {
           document.onmousemove = null;
         };
+
         break;
       }
 
@@ -152,8 +168,8 @@ export function chartSlider(
   );
 
   const [yMin, yMax] = computeBoundaries({ columns, types });
-  const yRatio = DPI_HEIGHT / (yMax - yMin);
-  const xRatio = dpiWidth / (columns[0].length - 2);
+  const yRatio = computeYRatio(DPI_HEIGHT, yMax, yMin);
+  const xRatio = computeXRatio(dpiWidth, columns[0].length);
 
   const mappedChartData = yData.map<Chart>((column) => {
     const columnName = column[0] as keyof Names;
@@ -163,7 +179,13 @@ export function chartSlider(
       // @ts-ignore
       .filter<number>(Number)
       .map((y, i) =>
-        toCoords(i, y, { xRatio, yRatio, dpiHeight: DPI_HEIGHT, padding: -5 })
+        toCoords(i, y, {
+          xRatio,
+          yRatio,
+          dpiHeight: DPI_HEIGHT,
+          padding: -5,
+          yMin,
+        })
       );
 
     return {
@@ -178,6 +200,7 @@ export function chartSlider(
 
   return {
     subscribe(fn: Callback) {
+      dispatch = fn;
       fn(getPosition());
     },
   };

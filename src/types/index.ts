@@ -24,4 +24,5 @@ export type MouseProxy = {
       left: number | null;
     };
   };
+  position: number[] | null;
 };

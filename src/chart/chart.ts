@@ -20,6 +20,8 @@ import {
   drawCircle,
   computeBoundaries,
   css,
+  computeYRatio,
+  computeXRatio,
 } from '@/utils';
 import { tooltip } from '@/tooltip';
 import { chartSlider } from '@/slider';
@@ -53,14 +55,6 @@ export function chart(
   canvas.width = DPI_WIDTH;
   canvas.height = DPI_HEIGHT;
 
-  const yData = columns.filter(
-    (column) => types[column[0] as keyof Types] === 'line'
-  );
-
-  const xData = columns.filter(
-    (column) => types[column[0] as keyof Types] !== 'line'
-  )[0];
-
   let raf: number;
 
   const proxy = new Proxy<MouseProxy>(
@@ -72,6 +66,7 @@ export function chart(
           left: null,
         },
       },
+      position: null,
     },
     {
       set(...args) {
@@ -82,6 +77,10 @@ export function chart(
     }
   );
 
+  slider.subscribe((position) => {
+    proxy.position = position;
+  });
+
   function clear() {
     ctx.clearRect(0, 0, DPI_WIDTH, DPI_HEIGHT);
   }
@@ -89,12 +88,34 @@ export function chart(
   function paint() {
     clear();
 
-    const [yMin, yMax] = computeBoundaries({ columns, types });
-    const yRatio = VIEW_HEIGHT / (yMax - yMin);
-    const xRatio = VIEW_WIDTH / (columns[0].length - 2);
+    const dataLength = columns[0].length;
+    const leftIndex = Math.round((dataLength * proxy.position![0]) / 100);
+    const rightIndex = Math.round((dataLength * proxy.position![1]) / 100);
+
+    const computedColumns = columns.map((column) => {
+      const result = column.slice(leftIndex, rightIndex);
+
+      if (typeof result[0] !== 'string') {
+        result.unshift(column[0]);
+      }
+
+      return result;
+    });
+
+    const yData = computedColumns.filter(
+      (column) => types[column[0] as keyof Types] === 'line'
+    );
+
+    const xData = computedColumns.filter(
+      (column) => types[column[0] as keyof Types] !== 'line'
+    )[0];
+
+    const [yMin, yMax] = computeBoundaries({ columns: computedColumns, types });
+    const yRatio = computeYRatio(VIEW_HEIGHT, yMax, yMin);
+    const xRatio = computeXRatio(VIEW_WIDTH, computedColumns[0].length);
 
     yAxis(yMin, yMax);
-    xAxis(xData, xRatio);
+    xAxis(xData, yData, xRatio);
 
     const mappedChartData = yData.map<Chart>((column) => {
       const columnName = column[0] as keyof Names;
@@ -109,6 +130,7 @@ export function chart(
             yRatio,
             dpiHeight: DPI_HEIGHT,
             padding: PADDING,
+            yMin,
           })
         );
 
@@ -168,20 +190,24 @@ export function chart(
     ctx.closePath();
   }
 
-  function xAxis(data: (string | number)[], xRatio: number) {
-    const step = Math.round(data.length / LABELS_COUNT);
+  function xAxis(
+    xData: (string | number)[],
+    yData: (string | number)[][],
+    xRatio: number
+  ) {
+    const step = Math.round(xData.length / LABELS_COUNT);
 
     ctx.beginPath();
 
-    for (let i = 1; i <= data.length; i++) {
+    for (let i = 1; i <= xData.length; i++) {
       const xCoord = i * xRatio;
 
       if ((i - 1) % step === 0) {
-        const text = toDate(data[i] as number);
+        const text = toDate(xData[i] as number);
         ctx.fillText(`${text}`, xCoord, DPI_HEIGHT - 10);
       }
 
-      if (proxy.mouse.x && isOver(proxy.mouse.x, xCoord, data.length)) {
+      if (proxy.mouse.x && isOver(proxy.mouse.x, xCoord, xData.length)) {
         ctx.save();
         ctx.moveTo(xCoord, PADDING / 2);
         ctx.lineTo(xCoord, DPI_HEIGHT - PADDING);
