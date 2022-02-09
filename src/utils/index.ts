@@ -1,5 +1,12 @@
-import { CIRCLE_RADIUS, DPI_WIDTH, MONTHS } from '@/chart/constants';
-import { ChartData, Options, Types } from '@/types';
+import { DPI_WIDTH, MONTHS } from '@/chart/constants';
+import {
+  ChartData,
+  Column,
+  MappedChartData,
+  Types,
+  Names,
+  Colors,
+} from '@/types';
 
 export function toDate(timestamp: number) {
   const date = new Date(timestamp);
@@ -34,39 +41,6 @@ export function isOver(mouseX: number, x: number, length: number) {
   return Math.abs(x - mouseX) < width / 2;
 }
 
-export function drawLine(
-  ctx: CanvasRenderingContext2D,
-  coords: number[][],
-  options: Options
-) {
-  const { color, lineWidth } = options;
-
-  ctx.beginPath();
-  ctx.lineWidth = lineWidth;
-  ctx.strokeStyle = color;
-
-  for (const [x, y] of coords) {
-    ctx.lineTo(x, y);
-  }
-
-  ctx.stroke();
-  ctx.closePath();
-}
-
-export function drawCircle(
-  ctx: CanvasRenderingContext2D,
-  [x, y]: [number, number],
-  color: string
-) {
-  ctx.beginPath();
-  ctx.strokeStyle = color;
-  ctx.fillStyle = '#fff';
-  ctx.arc(x, y, CIRCLE_RADIUS, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-  ctx.closePath();
-}
-
 export function computeBoundaries({
   columns,
   types,
@@ -95,4 +69,36 @@ export function computeXRatio(width: number, length: number) {
 
 export function computeYRatio(height: number, max: number, min: number) {
   return (max - min) / height;
+}
+
+export function mapData({
+  columns,
+  colors,
+  types,
+  names,
+}: ChartData): MappedChartData {
+  const xData = columns
+    .filter((column) => types[column[0] as keyof Types] !== 'line')
+    .flat();
+
+  const yAxis = columns
+    .filter((column) => types[column[0] as keyof Types] === 'line')
+    .map<Column>((column) => {
+      return {
+        type: types[column[0] as keyof Types],
+        name: names[column[0] as keyof Names],
+        color: colors[column[0] as keyof Colors],
+        // @ts-ignore
+        coords: column.filter<number>(Number),
+      };
+    });
+
+  return {
+    xAxis: {
+      type: types[xData[0] as keyof Types],
+      // @ts-ignore
+      coords: xData.filter<number>(Number),
+    },
+    yAxis,
+  };
 }

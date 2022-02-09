@@ -16,8 +16,6 @@ import {
   toCoords,
   toDate,
   isOver,
-  drawLine,
-  drawCircle,
   computeBoundaries,
   css,
   computeYRatio,
@@ -25,6 +23,7 @@ import {
 } from '@/utils';
 import { tooltip } from '@/tooltip';
 import { chartSlider } from '@/slider';
+import { Draw } from '@/core/draw';
 
 export function chart(
   root: HTMLElement,
@@ -46,6 +45,7 @@ export function chart(
   );
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const draw = new Draw(ctx);
 
   css(canvas, {
     width: `${WIDTH}px`,
@@ -141,11 +141,11 @@ export function chart(
     });
 
     mappedChartData.forEach(({ color, coords }) => {
-      drawLine(ctx, coords, { lineWidth: 4, color });
+      draw.drawLine(coords, { lineWidth: 4, color });
 
       for (const [x, y] of coords) {
         if (proxy.mouse.x && isOver(proxy.mouse.x, x, coords.length)) {
-          drawCircle(ctx, [x, y], color);
+          draw.drawCircle([x, y], { color });
         }
       }
     });

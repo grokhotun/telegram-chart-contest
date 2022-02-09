@@ -1,10 +1,10 @@
+import { Draw } from '@/core/draw';
 import { Chart, ChartData, Names, Types } from '@/types';
 import {
   computeBoundaries,
   computeXRatio,
   computeYRatio,
   css,
-  drawLine,
   toCoords,
 } from '@/utils';
 
@@ -27,6 +27,7 @@ export function chartSlider(
 
   const canvas = root.querySelector('canvas') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const draw = new Draw(ctx);
 
   canvas.width = dpiWidth;
   canvas.height = DPI_HEIGHT;
@@ -195,7 +196,7 @@ export function chartSlider(
   });
 
   mappedChartData.forEach(({ color, coords }) => {
-    drawLine(ctx, coords, { lineWidth: 4, color });
+    draw.drawLine(coords, { lineWidth: 4, color });
   });
 
   return {
