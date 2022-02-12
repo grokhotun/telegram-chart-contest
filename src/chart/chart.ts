@@ -7,10 +7,7 @@ import {
   DPI_HEIGHT,
   VIEW_HEIGHT,
   VIEW_WIDTH,
-  ROWS_COUNT,
-  STEP,
   LABELS_COUNT,
-  Y_AXIS_STYLES,
 } from '@/chart/constants';
 import {
   toCoords,
@@ -114,7 +111,14 @@ export function chart(
     const yRatio = computeYRatio(VIEW_HEIGHT, yMax, yMin);
     const xRatio = computeXRatio(VIEW_WIDTH, computedColumns[0].length);
 
-    yAxis(yMin, yMax);
+    draw.yAxis({
+      yMin,
+      yMax,
+      dpiWidth: DPI_WIDTH,
+      viewHeight: VIEW_HEIGHT,
+      textPadding: PADDING,
+    });
+
     xAxis(xData, yData, xRatio);
 
     const mappedChartData = yData.map<Chart>((column) => {
@@ -166,28 +170,6 @@ export function chart(
   function mouseleave() {
     proxy.mouse.x = null;
     canvasTooltip.hide();
-  }
-
-  function yAxis(yMin: number, yMax: number) {
-    const textStep = (yMax - yMin) / ROWS_COUNT;
-
-    ctx.beginPath();
-
-    ctx.lineWidth = Y_AXIS_STYLES.lineWidth;
-    ctx.strokeStyle = Y_AXIS_STYLES.strokeStyle;
-    ctx.font = Y_AXIS_STYLES.font;
-    ctx.fillStyle = Y_AXIS_STYLES.fillStyle;
-
-    for (let i = 1; i <= ROWS_COUNT; i++) {
-      const y = STEP * i;
-      const text = Math.round(yMax - textStep * i);
-      ctx.fillText(`${text}`, 5, y + PADDING - 10);
-      ctx.moveTo(0, y + PADDING);
-      ctx.lineTo(DPI_WIDTH, y + PADDING);
-    }
-
-    ctx.stroke();
-    ctx.closePath();
   }
 
   function xAxis(

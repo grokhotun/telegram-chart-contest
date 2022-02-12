@@ -30,5 +30,6 @@ module.exports = {
     'no-plusplus': 'off',
     'no-restricted-syntax': 'off',
     'no-use-before-define': ['error', { functions: false }],
+    'lines-between-class-members': 'off',
   },
 };
