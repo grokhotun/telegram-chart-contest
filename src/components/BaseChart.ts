@@ -45,6 +45,8 @@ export class BaseChart {
       height: `${this.height}px`,
     });
 
+    console.log('Log');
+
     this.canvas.width = this.dpiWidth;
     this.canvas.height = this.dpiHeight;
   }
