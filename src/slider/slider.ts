@@ -1,5 +1,5 @@
 import { Draw } from '@/core/draw';
-import { Chart, ChartData, Names, Types } from '@/types';
+import { Chart, ChartData, ChartNames, ChartTypes } from '@/types';
 import {
   computeBoundaries,
   computeXRatio,
@@ -165,7 +165,7 @@ export function chartSlider(
   setPosition(0, defaultWidth);
 
   const yData = columns.filter(
-    (column) => types[column[0] as keyof Types] === 'line'
+    (column) => types[column[0] as keyof ChartTypes] === 'line'
   );
 
   const [yMin, yMax] = computeBoundaries({ columns, types });
@@ -173,7 +173,7 @@ export function chartSlider(
   const xRatio = computeXRatio(dpiWidth, columns[0].length);
 
   const mappedChartData = yData.map<Chart>((column) => {
-    const columnName = column[0] as keyof Names;
+    const columnName = column[0] as keyof ChartNames;
     const color = colors[columnName];
 
     const coords = column

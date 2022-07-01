@@ -3,9 +3,9 @@ import {
   ChartData,
   Column,
   MappedChartData,
-  Types,
-  Names,
-  Colors,
+  ChartTypes,
+  ChartNames,
+  ChartColors,
 } from '@/types';
 
 export function toDate(timestamp: number) {
@@ -46,18 +46,9 @@ export function computeBoundaries({
   types,
 }: Pick<ChartData, 'columns' | 'types'>) {
   const data = columns
-    .filter((column) => types[column[0] as keyof Types] === 'line')
+    .filter((column) => types[column[0] as keyof ChartTypes] === 'line')
     .map((array) => array.filter(Number) as number[])
     .flat();
-
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-
-  return [min, max];
-}
-
-export function computeBoundaries2({ yAxis }: Pick<MappedChartData, 'yAxis'>) {
-  const data = yAxis.map(({ coords }) => coords).flat();
 
   const max = Math.max(...data);
   const min = Math.min(...data);
@@ -87,16 +78,16 @@ export function mapData({
   names,
 }: ChartData): MappedChartData {
   const xData = columns
-    .filter((column) => types[column[0] as keyof Types] !== 'line')
+    .filter((column) => types[column[0] as keyof ChartTypes] !== 'line')
     .flat();
 
   const yAxis = columns
-    .filter((column) => types[column[0] as keyof Types] === 'line')
+    .filter((column) => types[column[0] as keyof ChartTypes] === 'line')
     .map<Column>((column) => {
       return {
-        type: types[column[0] as keyof Types],
-        name: names[column[0] as keyof Names],
-        color: colors[column[0] as keyof Colors],
+        type: types[column[0] as keyof ChartTypes],
+        name: names[column[0] as keyof ChartNames],
+        color: colors[column[0] as keyof ChartColors],
         // @ts-ignore
         coords: column.filter<number>(Number),
       };
@@ -104,7 +95,7 @@ export function mapData({
 
   return {
     xAxis: {
-      type: types[xData[0] as keyof Types],
+      type: types[xData[0] as keyof ChartTypes],
       // @ts-ignore
       coords: xData.filter<number>(Number),
     },

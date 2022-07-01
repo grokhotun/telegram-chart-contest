@@ -2,9 +2,9 @@ import { getChartData } from '@/data';
 
 export type ChartData = ReturnType<typeof getChartData>;
 
-export type Types = ChartData['types'];
-export type Colors = ChartData['colors'];
-export type Names = ChartData['names'];
+export type ChartTypes = ChartData['types'];
+export type ChartColors = ChartData['colors'];
+export type ChartNames = ChartData['names'];
 
 export type Column = {
   name: string;

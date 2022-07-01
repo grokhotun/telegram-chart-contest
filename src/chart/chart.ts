@@ -1,4 +1,4 @@
-import { ChartData, Names, Types, Chart, MouseProxy } from '@/types';
+import { ChartData, ChartNames, ChartTypes, Chart, MouseProxy } from '@/types';
 import {
   PADDING,
   WIDTH,
@@ -100,11 +100,11 @@ export function chart(
     });
 
     const yData = computedColumns.filter(
-      (column) => types[column[0] as keyof Types] === 'line'
+      (column) => types[column[0] as keyof ChartTypes] === 'line'
     );
 
     const xData = computedColumns.filter(
-      (column) => types[column[0] as keyof Types] !== 'line'
+      (column) => types[column[0] as keyof ChartTypes] !== 'line'
     )[0];
 
     const [yMin, yMax] = computeBoundaries({ columns: computedColumns, types });
@@ -122,7 +122,7 @@ export function chart(
     xAxis(xData, yData, xRatio);
 
     const mappedChartData = yData.map<Chart>((column) => {
-      const columnName = column[0] as keyof Names;
+      const columnName = column[0] as keyof ChartNames;
       const color = colors[columnName];
 
       const coords = column
@@ -197,8 +197,8 @@ export function chart(
 
         if (proxy.mouse.tooltip.top && proxy.mouse.tooltip.left) {
           const content = yData.map((column) => ({
-            color: colors[column[0] as keyof Names],
-            name: names[column[0] as keyof Names],
+            color: colors[column[0] as keyof ChartNames],
+            name: names[column[0] as keyof ChartNames],
             value: `${column[i + 1]}`,
           }));
 
