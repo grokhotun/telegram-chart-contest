@@ -1,9 +1,16 @@
-import { PADDING } from '@/chart/constants';
+import { DPI_HEIGHT, LABELS_COUNT, PADDING } from '@/chart/constants';
 import { BaseChart } from '@/components/BaseChart';
-import { computeXRatio, computeYRatio, css, toCoords } from '@/utils';
+import {
+  computeXRatio,
+  computeYRatio,
+  css,
+  toCoords,
+  toDate,
+  isEven,
+} from '@/utils';
 
 import { Options } from '@/components/types';
-import { MouseProxy } from '@/types';
+import { MappedChartData, MouseProxy } from '@/types';
 import { computeBoundaries } from './helpers';
 
 export class MainChart extends BaseChart {
@@ -53,12 +60,53 @@ export class MainChart extends BaseChart {
     this.canvas.height = this.dpiHeight;
   }
 
+  drawXAxis(xData: number[], xRatio: number) {
+    const step = Math.round(xData.length / LABELS_COUNT);
+
+    this.context.beginPath();
+
+    xData.forEach((v, idx) => {
+      const xCoord = (idx + 1) * xRatio;
+
+      if (isEven(idx - 1, step)) {
+        const text = toDate(v);
+        this.context.fillText(`${text}`, xCoord, DPI_HEIGHT - 10);
+      }
+    });
+
+    this.context.stroke();
+    this.context.closePath();
+  }
+
+  calculateOffsetCoords() {
+    if (!this.proxy.position) return this.data;
+
+    const dataAmount = this.data.xAxis.coords.length;
+    const leftIndex = Math.round((dataAmount * this.proxy.position[0]) / 100);
+    const rightIndex = Math.round((dataAmount * this.proxy.position[1]) / 100);
+
+    return {
+      xAxis: {
+        ...this.data.xAxis,
+        coords: this.data.xAxis.coords.slice(leftIndex, rightIndex),
+      },
+      yAxis: this.data.yAxis.map((v) => ({
+        ...v,
+        coords: v.coords.slice(leftIndex, rightIndex),
+      })),
+    };
+  }
+
   render() {
     this.clear();
+    const calculatedData = this.calculateOffsetCoords();
 
-    const [yMin, yMax] = computeBoundaries({ yAxis: this.data.yAxis });
+    const [yMin, yMax] = computeBoundaries({ yAxis: calculatedData.yAxis });
     const yRatio = computeYRatio(this.viewHeight, yMax, yMin);
-    const xRatio = computeXRatio(this.viewWidth, this.data.xAxis.coords.length);
+    const xRatio = computeXRatio(
+      this.viewWidth,
+      calculatedData.xAxis.coords.length
+    );
 
     this.draw.yAxis({
       yMin,
@@ -68,7 +116,9 @@ export class MainChart extends BaseChart {
       textPadding: PADDING,
     });
 
-    this.data.yAxis
+    this.drawXAxis(calculatedData.xAxis.coords, xRatio);
+
+    calculatedData.yAxis
       .map(({ color, coords: initialCoords }) => {
         const coords = initialCoords.map((y, i) =>
           toCoords(i, y, {

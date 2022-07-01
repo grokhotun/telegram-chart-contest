@@ -41,6 +41,10 @@ export function isOver(mouseX: number, x: number, length: number) {
   return Math.abs(x - mouseX) < width / 2;
 }
 
+export function isEven(v: number, divider = 2) {
+  return v % divider === 0;
+}
+
 export function computeBoundaries({
   columns,
   types,
