@@ -75,6 +75,10 @@ export function computeYRatio(height: number, max: number, min: number) {
   return (max - min) / height;
 }
 
+function isNumber(v: number | string): v is number {
+  return typeof v === 'number';
+}
+
 export function mapData({
   columns,
   colors,
@@ -87,21 +91,17 @@ export function mapData({
 
   const yAxis = columns
     .filter((column) => types[column[0] as keyof ChartTypes] === 'line')
-    .map<Column>((column) => {
-      return {
-        type: types[column[0] as keyof ChartTypes],
-        name: names[column[0] as keyof ChartNames],
-        color: colors[column[0] as keyof ChartColors],
-        // @ts-ignore
-        coords: column.filter<number>(Number),
-      };
-    });
+    .map<Column>((column) => ({
+      type: types[column[0] as keyof ChartTypes],
+      name: names[column[0] as keyof ChartNames],
+      color: colors[column[0] as keyof ChartColors],
+      coords: column.filter<number>(isNumber),
+    }));
 
   return {
     xAxis: {
       type: types[xData[0] as keyof ChartTypes],
-      // @ts-ignore
-      coords: xData.filter<number>(Number),
+      coords: xData.filter<number>(isNumber),
     },
     yAxis,
   };
