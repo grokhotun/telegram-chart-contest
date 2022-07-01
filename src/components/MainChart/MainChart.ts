@@ -10,7 +10,7 @@ import {
 } from '@/utils';
 
 import { Options } from '@/components/types';
-import { MappedChartData, MouseProxy } from '@/types';
+import { MouseProxy } from '@/types';
 import { computeBoundaries } from './helpers';
 
 export class MainChart extends BaseChart {
@@ -70,7 +70,7 @@ export class MainChart extends BaseChart {
 
       if (isEven(idx - 1, step)) {
         const text = toDate(v);
-        this.context.fillText(`${text}`, xCoord, DPI_HEIGHT - 10);
+        this.context.fillText(text, xCoord, DPI_HEIGHT - 10);
       }
     });
 
@@ -79,7 +79,10 @@ export class MainChart extends BaseChart {
   }
 
   calculateOffsetCoords() {
-    if (!this.proxy.position) return this.data;
+    if (!this.proxy.position)
+      return {
+        ...this.data,
+      };
 
     const dataAmount = this.data.xAxis.coords.length;
     const leftIndex = Math.round((dataAmount * this.proxy.position[0]) / 100);
@@ -154,5 +157,9 @@ export class MainChart extends BaseChart {
       if (!position) return;
       this.onPositionUpdate(position);
     });
+  }
+
+  destroy() {
+    this.observer.unsubscribe('slider');
   }
 }

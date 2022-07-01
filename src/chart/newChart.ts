@@ -7,8 +7,7 @@ import {
   SLIDER_HEIGHT,
 } from '@/chart/constants';
 import { mapData } from '@/utils';
-import { MainChart } from '@/components';
-import { SliderChart } from '@/components/SliderChart';
+import { MainChart, SliderChart } from '@/components';
 
 export function newChart(
   root: HTMLElement,
@@ -49,6 +48,9 @@ export function newChart(
       mainChart.init();
       sliderChart.init();
     },
-    destroy() {},
+    destroy() {
+      mainChart.destroy();
+      sliderChart.destroy();
+    },
   };
 }

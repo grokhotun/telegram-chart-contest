@@ -184,7 +184,13 @@ export class SliderChart extends BaseChart {
 
   init() {
     this.setPositions(0, this.width * 0.3);
+    this.broadcast();
+
     this.render();
     this.root.addEventListener('mousedown', this.handleMouseDown);
+  }
+
+  destroy() {
+    this.root.removeEventListener('mousedown', this.handleMouseDown);
   }
 }
