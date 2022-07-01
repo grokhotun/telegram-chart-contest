@@ -20,7 +20,7 @@ import {
 } from '@/utils';
 import { tooltip } from '@/tooltip';
 import { chartSlider } from '@/slider';
-import { Draw } from '@/core/draw';
+import { Draw } from '@/core/Draw';
 
 export function chart(
   root: HTMLElement,

@@ -1,4 +1,4 @@
-import { Draw } from '@/core/draw';
+import { Draw } from '@/core/Draw';
 import { Chart, ChartData, ChartNames, ChartTypes } from '@/types';
 import {
   computeBoundaries,
@@ -163,6 +163,7 @@ export function chartSlider(
 
   const defaultWidth = width * 0.3;
   setPosition(0, defaultWidth);
+  console.log($window.style.left, $window.style.right);
 
   const yData = columns.filter(
     (column) => types[column[0] as keyof ChartTypes] === 'line'

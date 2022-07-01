@@ -9,6 +9,7 @@ export const ROWS_COUNT = 5;
 export const STEP = VIEW_HEIGHT / ROWS_COUNT;
 export const LABELS_COUNT = 6;
 export const CIRCLE_RADIUS = 8;
+export const SLIDER_HEIGHT = 40;
 
 export const Y_AXIS_STYLES = {
   lineWidth: 1,
