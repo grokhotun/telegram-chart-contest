@@ -18,13 +18,21 @@ export abstract class BaseChart {
   readonly height: number;
 
   constructor(options: Options) {
-    const { width, height, data, root, canvasHeight, canvasWidth, store } =
-      options;
+    const {
+      width,
+      height,
+      data,
+      root,
+      canvasHeight,
+      canvasWidth,
+      store,
+      theme,
+    } = options;
 
     this.root = root;
     this.canvas = root.querySelector('canvas') as HTMLCanvasElement;
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-    this.draw = new Draw(this.context);
+    this.draw = new Draw(this.context, theme);
     this.observer = new Observer(store);
 
     this.data = data;

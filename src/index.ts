@@ -1,29 +1,29 @@
 import '@/styles.scss';
 
-import { chart } from '@/chart';
 import { getDataByIndex } from '@/data';
+import { TelegramChart } from '@/chart';
 
-chart(
-  document.getElementById('chart-1') as HTMLCanvasElement,
-  getDataByIndex(0)
-).init();
+new TelegramChart({
+  root: document.querySelector('#chart-1') as HTMLElement,
+  data: getDataByIndex(0),
+}).init();
 
-chart(
-  document.getElementById('chart-2') as HTMLCanvasElement,
-  getDataByIndex(1)
-).init();
+new TelegramChart({
+  root: document.querySelector('#chart-2') as HTMLElement,
+  data: getDataByIndex(1),
+}).init();
 
-chart(
-  document.getElementById('chart-3') as HTMLCanvasElement,
-  getDataByIndex(2)
-).init();
+new TelegramChart({
+  root: document.querySelector('#chart-3') as HTMLElement,
+  data: getDataByIndex(2),
+}).init();
 
-chart(
-  document.getElementById('chart-4') as HTMLCanvasElement,
-  getDataByIndex(3)
-).init();
+new TelegramChart({
+  root: document.querySelector('#chart-4') as HTMLElement,
+  data: getDataByIndex(3),
+}).init();
 
-chart(
-  document.getElementById('chart-5') as HTMLCanvasElement,
-  getDataByIndex(4)
-).init();
+new TelegramChart({
+  root: document.querySelector('#chart-5') as HTMLElement,
+  data: getDataByIndex(4),
+}).init();

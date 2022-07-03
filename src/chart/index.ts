@@ -1,1 +1,1 @@
-export { chart } from './chart';
+export { TelegramChart } from './TelegramChart';

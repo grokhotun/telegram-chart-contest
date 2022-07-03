@@ -35,14 +35,14 @@ h1 {
   margin-bottom: 1rem;
 }
 
-.tg-chart {
+.telegram-chart {
   position: relative;
 
   > canvas {
     z-index: 2;
   }
 
-  .tg-chart-slider {
+  .telegram-chart-slider {
     position: relative;
     margin-bottom: 1rem;
     z-index: 1;
@@ -93,7 +93,7 @@ h1 {
     }
   }
 
-  .tg-chart-tooltip {
+  .telegram-chart-tooltip {
     position: absolute;
     max-width: 200px;
     min-width: 120px;
@@ -141,7 +141,7 @@ h1 {
   }
 }
 
-.tg-chart-checkbox {
+.telegram-chart-checkbox {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -185,7 +185,7 @@ h1 {
       animation-delay: 250ms;
       animation-timing-function: cubic-bezier(0.4, 0, 0.23, 1);
       animation-fill-mode: forwards;
-      //animation: checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards;
+      animation: checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards;
     }
   }
 

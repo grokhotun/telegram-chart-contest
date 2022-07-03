@@ -1,11 +1,18 @@
 import { CIRCLE_RADIUS, ROWS_COUNT, Y_AXIS_STYLES } from '@/chart/constants';
+import { Theme } from '@/theme';
 import { Options } from '@/types';
 
 export class Draw {
   private readonly context: CanvasRenderingContext2D;
+  private theme: Theme;
 
-  constructor(context: CanvasRenderingContext2D) {
+  constructor(context: CanvasRenderingContext2D, theme: Theme) {
     this.context = context;
+    this.theme = theme;
+  }
+
+  setTheme(theme: Theme) {
+    this.theme = theme;
   }
 
   drawLine(coords: number[][], options: Options) {
@@ -28,7 +35,7 @@ export class Draw {
 
     this.context.beginPath();
     this.context.strokeStyle = color;
-    this.context.fillStyle = '#fff';
+    this.context.fillStyle = this.theme.background;
     this.context.arc(x, y, CIRCLE_RADIUS, 0, Math.PI * 2);
     this.context.fill();
     this.context.stroke();
