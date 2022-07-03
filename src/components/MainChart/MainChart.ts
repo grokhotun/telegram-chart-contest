@@ -79,7 +79,7 @@ export class MainChart extends BaseChart {
       const xCoord = (idx + 1) * xRatio;
       const text = toDate(v);
 
-      if (isEven(idx - 1, step)) {
+      if (isEven(idx, step)) {
         this.context.fillText(text, xCoord, DPI_HEIGHT - 10);
       }
 

@@ -1,4 +1,4 @@
-import { DPI_WIDTH, MONTHS } from '@/chart/constants';
+import { DPI_WIDTH, Months } from '@/chart/constants';
 import {
   ChartData,
   Column,
@@ -10,7 +10,7 @@ import {
 
 export function toDate(timestamp: number) {
   const date = new Date(timestamp);
-  return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
+  return `${Months[date.getMonth()]} ${date.getDate()}`;
 }
 
 export function toCoords(
@@ -68,7 +68,7 @@ export function css(
 }
 
 export function computeXRatio(width: number, length: number) {
-  return width / (length - 2);
+  return width / (length - 1);
 }
 
 export function computeYRatio(height: number, max: number, min: number) {

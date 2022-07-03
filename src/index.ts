@@ -1,7 +1,6 @@
 import '@/styles.scss';
 
 import { chart } from '@/chart';
-import { newChart } from '@/chart/newChart';
 import { getDataByIndex } from '@/data';
 
 chart(
@@ -9,7 +8,7 @@ chart(
   getDataByIndex(0)
 ).init();
 
-newChart(
+chart(
   document.getElementById('chart-2') as HTMLCanvasElement,
-  getDataByIndex(0)
+  getDataByIndex(1)
 ).init();
