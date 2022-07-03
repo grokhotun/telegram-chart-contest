@@ -1,1 +1,0 @@
-export { chartSlider } from './slider';

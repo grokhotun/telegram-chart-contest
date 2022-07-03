@@ -1,0 +1,1 @@
+export { SliderChart } from './SliderChart';

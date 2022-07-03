@@ -9,6 +9,7 @@ export const ROWS_COUNT = 5;
 export const STEP = VIEW_HEIGHT / ROWS_COUNT;
 export const LABELS_COUNT = 6;
 export const CIRCLE_RADIUS = 8;
+export const SLIDER_HEIGHT = 40;
 
 export const Y_AXIS_STYLES = {
   lineWidth: 1,
@@ -17,17 +18,17 @@ export const Y_AXIS_STYLES = {
   fillStyle: '#96a2aa',
 };
 
-export const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+export enum Months {
+  'Jan' = 0,
+  'Feb' = 1,
+  'Mar' = 2,
+  'Apr' = 3,
+  'May' = 4,
+  'Jun' = 5,
+  'Jul' = 6,
+  'Aug' = 7,
+  'Sep' = 8,
+  'Oct' = 9,
+  'Nov' = 10,
+  'Dec' = 11,
+}

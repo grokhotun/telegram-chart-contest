@@ -1,4 +1,4 @@
-import { DPI_WIDTH, MONTHS } from '@/chart/constants';
+import { DPI_WIDTH, Months } from '@/chart/constants';
 import {
   ChartData,
   Column,
@@ -10,7 +10,7 @@ import {
 
 export function toDate(timestamp: number) {
   const date = new Date(timestamp);
-  return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
+  return `${Months[date.getMonth()]} ${date.getDate()}`;
 }
 
 export function toCoords(
@@ -41,6 +41,10 @@ export function isOver(mouseX: number, x: number, length: number) {
   return Math.abs(x - mouseX) < width / 2;
 }
 
+export function isEven(v: number, divider = 2) {
+  return v % divider === 0;
+}
+
 export function computeBoundaries({
   columns,
   types,
@@ -64,11 +68,15 @@ export function css(
 }
 
 export function computeXRatio(width: number, length: number) {
-  return width / (length - 2);
+  return width / (length - 1);
 }
 
 export function computeYRatio(height: number, max: number, min: number) {
   return (max - min) / height;
+}
+
+function isNumber(v: number | string): v is number {
+  return typeof v === 'number';
 }
 
 export function mapData({
@@ -83,21 +91,17 @@ export function mapData({
 
   const yAxis = columns
     .filter((column) => types[column[0] as keyof ChartTypes] === 'line')
-    .map<Column>((column) => {
-      return {
-        type: types[column[0] as keyof ChartTypes],
-        name: names[column[0] as keyof ChartNames],
-        color: colors[column[0] as keyof ChartColors],
-        // @ts-ignore
-        coords: column.filter<number>(Number),
-      };
-    });
+    .map<Column>((column) => ({
+      type: types[column[0] as keyof ChartTypes],
+      name: names[column[0] as keyof ChartNames],
+      color: colors[column[0] as keyof ChartColors],
+      coords: column.filter<number>(isNumber),
+    }));
 
   return {
     xAxis: {
       type: types[xData[0] as keyof ChartTypes],
-      // @ts-ignore
-      coords: xData.filter<number>(Number),
+      coords: xData.filter<number>(isNumber),
     },
     yAxis,
   };

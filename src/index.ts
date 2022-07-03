@@ -1,11 +1,14 @@
 import '@/styles.scss';
 
 import { chart } from '@/chart';
-import { getChartData } from '@/data';
+import { getDataByIndex } from '@/data';
 
-const telegramChart = chart(
+chart(
   document.getElementById('chart') as HTMLCanvasElement,
-  getChartData()
-);
+  getDataByIndex(0)
+).init();
 
-telegramChart.init();
+chart(
+  document.getElementById('chart-2') as HTMLCanvasElement,
+  getDataByIndex(1)
+).init();
