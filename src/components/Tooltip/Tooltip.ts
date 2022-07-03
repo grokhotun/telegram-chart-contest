@@ -27,7 +27,7 @@ export class Tooltip {
     const { width, height } = this.tooltip.getBoundingClientRect();
 
     css(this.tooltip, {
-      display: 'block',
+      opacity: '1',
       top: `${top - height}px`,
       left: `${left + width}px`,
     });
@@ -37,7 +37,7 @@ export class Tooltip {
 
   hide() {
     css(this.tooltip, {
-      display: 'none',
+      opacity: '0',
     });
   }
 

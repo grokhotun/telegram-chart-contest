@@ -95,7 +95,6 @@ h1 {
 
   .tg-chart-tooltip {
     position: absolute;
-    display: none;
     max-width: 200px;
     min-width: 120px;
     padding: 0.5rem;
@@ -106,6 +105,8 @@ h1 {
     color: #000;
     overflow: hidden;
     z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s;
 
     top: 50px;
     left: 100px;
