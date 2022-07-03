@@ -230,5 +230,7 @@ export class MainChart extends BaseChart {
 
   destroy() {
     this.observer.unsubscribe('slider');
+    this.canvas.removeEventListener('mousemove', this.handleMouseMove);
+    this.canvas.removeEventListener('mouseleave', this.handleMouseLeave);
   }
 }

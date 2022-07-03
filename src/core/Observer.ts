@@ -12,7 +12,7 @@ export class Observer {
     this.subscribers[key] = cb;
   }
 
-  dispatch<T>(key: string, payload: T) {
+  dispatch<T>(key: string, payload?: T) {
     const cb = this.subscribers[key];
     cb(payload);
   }

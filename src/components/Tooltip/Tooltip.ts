@@ -1,6 +1,6 @@
 import { css } from '@/utils';
 
-type TooltipItem = {
+type ContentItem = {
   value: string;
   name: string;
   color: string;
@@ -22,7 +22,7 @@ export class Tooltip {
     top: number;
     left: number;
     title: string;
-    content: TooltipItem[];
+    content: ContentItem[];
   }) {
     const { width, height } = this.tooltip.getBoundingClientRect();
 
@@ -45,7 +45,7 @@ export class Tooltip {
     this.tooltip.innerHTML = '';
   }
 
-  render(title: string, content: TooltipItem[]) {
+  render(title: string, content: ContentItem[]) {
     this.clear();
 
     return `
