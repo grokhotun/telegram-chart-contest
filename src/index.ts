@@ -11,5 +11,5 @@ chart(
 
 newChart(
   document.getElementById('chart-2') as HTMLCanvasElement,
-  getDataByIndex(4)
+  getDataByIndex(0)
 ).init();
