@@ -13,6 +13,7 @@ import {
 import { Options } from '@/components/types';
 import { MappedChartData, MouseProxy } from '@/types';
 import { Tooltip } from '@/components/Tooltip';
+import { Theme } from '@/theme';
 import { computeBoundaries } from './helpers';
 
 export class MainChart extends BaseChart {
@@ -80,9 +81,9 @@ export class MainChart extends BaseChart {
 
     this.context.beginPath();
 
-    xCoords.forEach((v, idx) => {
+    xCoords.forEach((coord, idx) => {
       const xCoord = (idx + 1) * xRatio;
-      const text = toDate(v);
+      const text = toDate(coord);
 
       if (isEven(idx, step)) {
         this.context.fillText(text, xCoord, DPI_HEIGHT - 10);
@@ -228,6 +229,8 @@ export class MainChart extends BaseChart {
     this.proxy.mouse.x = null;
     this.tooltip.hide();
   }
+
+  setTheme(theme: Theme) {}
 
   init() {
     this.render();

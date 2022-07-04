@@ -45,21 +45,6 @@ export function isEven(v: number, divider = 2) {
   return v % divider === 0;
 }
 
-export function computeBoundaries({
-  columns,
-  types,
-}: Pick<ChartData, 'columns' | 'types'>) {
-  const data = columns
-    .filter((column) => types[column[0] as keyof ChartTypes] === 'line')
-    .map((array) => array.filter(Number) as number[])
-    .flat();
-
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-
-  return [min, max];
-}
-
 export function css(
   element: HTMLElement,
   styles: Partial<CSSStyleDeclaration>

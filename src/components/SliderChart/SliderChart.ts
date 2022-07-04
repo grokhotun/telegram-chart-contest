@@ -2,6 +2,7 @@ import { BaseChart } from '@/components/BaseChart';
 import { computeBoundaries } from '@/components/MainChart/helpers';
 
 import { Options } from '@/components/types';
+import { Theme } from '@/theme';
 import { computeXRatio, computeYRatio, css, toCoords } from '@/utils';
 
 export class SliderChart extends BaseChart {
@@ -183,6 +184,8 @@ export class SliderChart extends BaseChart {
         this.draw.drawLine(coords, { lineWidth: 4, color });
       });
   }
+
+  setTheme(theme: Theme) {}
 
   init() {
     this.setPositions(0, this.width * 0.3);

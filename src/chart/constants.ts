@@ -11,13 +11,6 @@ export const LABELS_COUNT = 6;
 export const CIRCLE_RADIUS = 8;
 export const SLIDER_HEIGHT = 40;
 
-export const Y_AXIS_STYLES = {
-  lineWidth: 1,
-  strokeStyle: '#bbb',
-  font: 'normal 20px Helvetica,sans-serif',
-  fillStyle: '#96a2aa',
-};
-
 export enum Months {
   'Jan' = 0,
   'Feb' = 1,

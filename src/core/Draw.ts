@@ -1,4 +1,4 @@
-import { CIRCLE_RADIUS, ROWS_COUNT, Y_AXIS_STYLES } from '@/chart/constants';
+import { CIRCLE_RADIUS, ROWS_COUNT } from '@/chart/constants';
 import { Theme } from '@/theme';
 import { Options } from '@/types';
 
@@ -35,7 +35,7 @@ export class Draw {
 
     this.context.beginPath();
     this.context.strokeStyle = color;
-    this.context.fillStyle = this.theme.background;
+    this.context.fillStyle = this.theme.chartBackground;
     this.context.arc(x, y, CIRCLE_RADIUS, 0, Math.PI * 2);
     this.context.fill();
     this.context.stroke();
@@ -61,10 +61,10 @@ export class Draw {
 
     this.context.beginPath();
 
-    this.context.lineWidth = Y_AXIS_STYLES.lineWidth;
-    this.context.strokeStyle = Y_AXIS_STYLES.strokeStyle;
-    this.context.font = Y_AXIS_STYLES.font;
-    this.context.fillStyle = Y_AXIS_STYLES.fillStyle;
+    this.context.lineWidth = this.theme.chartLineWidth;
+    this.context.strokeStyle = this.theme.chartLineColor;
+    this.context.font = this.theme.font;
+    this.context.fillStyle = this.theme.chartLineColor;
 
     for (let i = 1; i <= rowsCount; i++) {
       const y = (viewHeight / rowsCount) * i;

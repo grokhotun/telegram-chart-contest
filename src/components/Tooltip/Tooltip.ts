@@ -1,3 +1,4 @@
+import { Theme } from '@/theme';
 import { css } from '@/utils';
 
 type ContentItem = {
@@ -11,6 +12,15 @@ export class Tooltip {
 
   constructor(element: HTMLElement) {
     this.tooltip = element;
+  }
+
+  setTheme(theme: Theme) {
+    css(this.tooltip, {
+      background: theme.tooltipBackground,
+      borderColor: theme.tooltipBorder,
+      boxShadow: theme.tooltipShadow,
+      color: theme.tooltipColor,
+    });
   }
 
   show({

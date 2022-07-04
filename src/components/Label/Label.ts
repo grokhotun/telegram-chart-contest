@@ -9,7 +9,7 @@ export class Label {
 
   render() {
     return `
-      <div class="telegram-chart-checkbox">
+      <div data-element="checkbox" class="telegram-chart-checkbox">
         <input type="checkbox" value="${this.name}" checked />
         <label>
           <span style="border-color: ${this.color}"></span>

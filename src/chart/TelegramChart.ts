@@ -10,7 +10,7 @@ import { Label } from '@/components/Label';
 import { Store } from '@/core/Observer';
 import { Theme, theme as constantTheme, ThemeKeys } from '@/theme';
 import { ChartData, MappedChartData } from '@/types';
-import { mapData } from '@/utils';
+import { css, mapData } from '@/utils';
 
 import { template } from './template';
 
@@ -54,6 +54,19 @@ export class TelegramChart {
 
   setTheme(themeKey: ThemeKeys) {
     this.theme = constantTheme[themeKey];
+
+    this.mainChart?.setTheme(this.theme);
+    this.sliderChart?.setTheme(this.theme);
+    this.labels
+      .querySelectorAll('[data-element="checkbox"]')
+      .forEach((label) => {
+        if (!(label instanceof HTMLElement)) return;
+
+        css(label, {
+          color: this.theme.checkboxColor,
+          borderColor: this.theme.checkboxBorder,
+        });
+      });
   }
 
   private handleMouseClick(e: MouseEvent) {
