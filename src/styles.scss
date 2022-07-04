@@ -13,7 +13,7 @@
 body {
   font-family: sans-serif;
   background: #fff;
-  transition: background 0.5s;
+  transition: background 0.5s ease-in-out;
 
   &.dark-mode {
     background: #242f3e;
@@ -26,7 +26,7 @@ body {
 
 .title {
   color: #000;
-  transition: color 0.5s;
+  transition: color 0.5s ease-in-out;
   margin-bottom: 1em;
 }
 
@@ -59,7 +59,7 @@ body {
 
     &__right,
     &__left {
-      transition: background 0.22s ease-in-out;
+      transition: background 0.5s ease-in-out;
       background: #f5f9fb;
       opacity: 0.8;
       position: absolute;
@@ -75,24 +75,26 @@ body {
       right: 0;
     }
 
-    &__arrow--left,
-    &__arrow--right {
+    &__handle--left,
+    &__handle--right {
       position: absolute;
       top: 0;
       bottom: 0;
-      transition: background 0.22s ease-in-out;
+      transition: background 0.5s ease-in-out;
       background: #ddeaf3;
       width: 4px;
     }
 
-    &__arrow--left {
-      right: 0;
+    &__handle--left {
       cursor: w-resize;
+      right: 0;
+      border-radius: 5px 0 0 5px;
     }
 
-    &__arrow--right {
-      left: 0;
+    &__handle--right {
       cursor: e-resize;
+      left: 0;
+      border-radius: 0 5px 5px 0;
     }
 
     &__window {
@@ -100,6 +102,7 @@ body {
       background: transparent;
       top: 0;
       bottom: 0;
+      transition: border 0.5s ease-in-out;
       border-top: 2px solid #ddeaf3;
       border-bottom: 2px solid #ddeaf3;
     }
@@ -162,7 +165,7 @@ body {
   border: 1px solid #e6ecf0;
   padding: 0.5rem 0.8rem 0.5rem 0.5rem;
   border-radius: 20px;
-  transition: border-color, color 0.22s ease-in-out;
+  transition: border-color, color 0.5s ease-in-out;
 
   input {
     position: absolute;

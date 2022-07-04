@@ -19,7 +19,7 @@ export class Tooltip {
       background: theme.tooltipBackground,
       borderColor: theme.tooltipBorder,
       boxShadow: theme.tooltipShadow,
-      color: theme.tooltipColor,
+      color: theme.tooltipTextColor,
     });
   }
 

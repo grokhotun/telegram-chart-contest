@@ -192,14 +192,14 @@ export class MainChart extends BaseChart {
         };
       })
       .forEach(({ color, coords }) => {
-        this.draw.drawLine(coords, { lineWidth: 4, color });
+        this.draw.drawLine(coords, color);
 
         for (const [x, y] of coords) {
           if (
             this.proxy.mouse.x &&
             isOver(this.proxy.mouse.x, x, coords.length)
           ) {
-            this.draw.drawCircle([x, y], { color });
+            this.draw.drawCircle([x, y], color);
           }
         }
       });
@@ -230,7 +230,11 @@ export class MainChart extends BaseChart {
     this.tooltip.hide();
   }
 
-  setTheme(theme: Theme) {}
+  setTheme(theme: Theme) {
+    this.tooltip.setTheme(theme);
+    this.draw.setTheme(theme);
+    this.raf = requestAnimationFrame(this.render);
+  }
 
   init() {
     this.render();

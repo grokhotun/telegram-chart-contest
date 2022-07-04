@@ -7,6 +7,8 @@ import { computeXRatio, computeYRatio, css, toCoords } from '@/utils';
 
 export class SliderChart extends BaseChart {
   readonly window: HTMLElement;
+  readonly leftSliderPart: HTMLElement;
+  readonly rightSliderPart: HTMLElement;
   readonly leftHandle: HTMLElement;
   readonly rightHandle: HTMLElement;
 
@@ -17,11 +19,18 @@ export class SliderChart extends BaseChart {
       '[data-element="window"]'
     ) as HTMLElement;
 
-    this.leftHandle = options.root.querySelector(
+    this.leftSliderPart = options.root.querySelector(
       '[data-element="left"]'
     ) as HTMLElement;
-    this.rightHandle = options.root.querySelector(
+    this.rightSliderPart = options.root.querySelector(
       '[data-element="right"]'
+    ) as HTMLElement;
+
+    this.leftHandle = this.leftSliderPart.querySelector(
+      '[data-element="handle"]'
+    ) as HTMLElement;
+    this.rightHandle = this.rightSliderPart.querySelector(
+      '[data-element="handle"]'
     ) as HTMLElement;
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -35,8 +44,8 @@ export class SliderChart extends BaseChart {
   }
 
   private getPosition() {
-    const left = parseInt(this.leftHandle.style.width, 10);
-    const right = this.width - parseInt(this.rightHandle.style.width, 10);
+    const left = parseInt(this.leftSliderPart.style.width, 10);
+    const right = this.width - parseInt(this.rightSliderPart.style.width, 10);
 
     return [(left * 100) / this.width, (right * 100) / this.width];
   }
@@ -122,7 +131,7 @@ export class SliderChart extends BaseChart {
       css(this.window, {
         left: '0px',
       });
-      css(this.leftHandle, {
+      css(this.leftSliderPart, {
         width: '0px',
       });
       return;
@@ -132,7 +141,7 @@ export class SliderChart extends BaseChart {
       css(this.window, {
         right: '0px',
       });
-      css(this.rightHandle, {
+      css(this.rightSliderPart, {
         width: '0px',
       });
       return;
@@ -144,11 +153,11 @@ export class SliderChart extends BaseChart {
       right: `${right}px`,
     });
 
-    css(this.leftHandle, {
+    css(this.leftSliderPart, {
       width: `${left}px`,
     });
 
-    css(this.rightHandle, {
+    css(this.rightSliderPart, {
       width: `${right}px`,
     });
   }
@@ -181,11 +190,27 @@ export class SliderChart extends BaseChart {
         };
       })
       .forEach(({ color, coords }) => {
-        this.draw.drawLine(coords, { lineWidth: 4, color });
+        this.draw.drawLine(coords, color);
       });
   }
 
-  setTheme(theme: Theme) {}
+  setTheme(theme: Theme) {
+    css(this.window, {
+      borderColor: theme.sliderHandle,
+    });
+    css(this.leftSliderPart, {
+      background: theme.sliderBackground,
+    });
+    css(this.rightSliderPart, {
+      background: theme.sliderBackground,
+    });
+    css(this.leftHandle, {
+      background: theme.sliderHandle,
+    });
+    css(this.rightHandle, {
+      background: theme.sliderHandle,
+    });
+  }
 
   init() {
     this.setPositions(0, this.width * 0.3);

@@ -23,11 +23,6 @@ export type Chart = {
   coords: number[][];
 };
 
-export type Options = {
-  color: string;
-  lineWidth: number;
-};
-
 export type MouseProxy = {
   mouse: {
     x: number | null;

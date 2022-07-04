@@ -1,6 +1,5 @@
 import { CIRCLE_RADIUS, ROWS_COUNT } from '@/chart/constants';
 import { Theme } from '@/theme';
-import { Options } from '@/types';
 
 export class Draw {
   private readonly context: CanvasRenderingContext2D;
@@ -15,11 +14,9 @@ export class Draw {
     this.theme = theme;
   }
 
-  drawLine(coords: number[][], options: Options) {
-    const { color, lineWidth } = options;
-
+  drawLine(coords: number[][], color: string) {
     this.context.beginPath();
-    this.context.lineWidth = lineWidth;
+    this.context.lineWidth = this.theme.yLinesWidth;
     this.context.strokeStyle = color;
 
     for (const [x, y] of coords) {
@@ -30,9 +27,7 @@ export class Draw {
     this.context.closePath();
   }
 
-  drawCircle([x, y]: number[], options: Pick<Options, 'color'>) {
-    const { color } = options;
-
+  drawCircle([x, y]: number[], color: string) {
     this.context.beginPath();
     this.context.strokeStyle = color;
     this.context.fillStyle = this.theme.chartBackground;
@@ -61,10 +56,10 @@ export class Draw {
 
     this.context.beginPath();
 
+    this.context.font = this.theme.font;
     this.context.lineWidth = this.theme.chartLineWidth;
     this.context.strokeStyle = this.theme.chartLineColor;
-    this.context.font = this.theme.font;
-    this.context.fillStyle = this.theme.chartLineColor;
+    this.context.fillStyle = this.theme.chartTextColor;
 
     for (let i = 1; i <= rowsCount; i++) {
       const y = (viewHeight / rowsCount) * i;
