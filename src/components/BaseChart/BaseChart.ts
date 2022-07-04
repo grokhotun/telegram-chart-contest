@@ -18,16 +18,7 @@ export abstract class BaseChart {
   readonly height: number;
 
   constructor(options: Options) {
-    const {
-      width,
-      height,
-      data,
-      root,
-      canvasHeight,
-      canvasWidth,
-      store,
-      theme,
-    } = options;
+    const { width, height, data, root, store, theme } = options;
 
     this.root = root;
     this.canvas = root.querySelector('canvas') as HTMLCanvasElement;
@@ -38,16 +29,16 @@ export abstract class BaseChart {
     this.data = data;
     this.width = width;
     this.height = height;
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
+    this.canvasWidth = width * 2;
+    this.canvasHeight = height * 2;
 
     css(this.canvas, {
       width: `${width}px`,
       height: `${height}px`,
     });
 
-    this.canvas.width = canvasWidth;
-    this.canvas.height = canvasHeight;
+    this.canvas.width = this.canvasWidth;
+    this.canvas.height = this.canvasHeight;
   }
 
   abstract render(): void;

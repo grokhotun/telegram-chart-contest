@@ -18,10 +18,6 @@ import { computeBoundaries } from './helpers';
 
 export class MainChart extends BaseChart {
   private raf: number;
-  private readonly dpiWidth: number;
-  private readonly dpiHeight: number;
-  private readonly viewWidth: number;
-  private readonly viewHeight: number;
   private readonly proxy: MouseProxy;
   private readonly tooltip: Tooltip;
 
@@ -57,18 +53,13 @@ export class MainChart extends BaseChart {
       this.root.querySelector('[data-element="tooltip"]') as HTMLElement
     );
 
-    this.dpiWidth = this.width * 2;
-    this.dpiHeight = this.height * 2;
-    this.viewWidth = this.dpiWidth;
-    this.viewHeight = this.dpiHeight - PADDING * 2;
-
     css(this.canvas, {
       width: `${this.width}px`,
       height: `${this.height}px`,
     });
 
-    this.canvas.width = this.dpiWidth;
-    this.canvas.height = this.dpiHeight;
+    this.canvas.width = this.canvasWidth;
+    this.canvas.height = this.canvasHeight;
   }
 
   get activeCharts() {
@@ -155,17 +146,17 @@ export class MainChart extends BaseChart {
     );
 
     const [yMin, yMax] = computeBoundaries({ yAxis: activeCharts });
-    const yRatio = computeYRatio(this.viewHeight, yMax, yMin);
+    const yRatio = computeYRatio(this.canvasHeight - PADDING * 2, yMax, yMin);
     const xRatio = computeXRatio(
-      this.viewWidth,
+      this.canvasWidth,
       calculatedData.xAxis.coords.length
     );
 
     this.draw.yAxis({
       yMin,
       yMax,
-      dpiWidth: this.dpiWidth,
-      viewHeight: this.viewHeight,
+      dpiWidth: this.canvasWidth,
+      viewHeight: this.canvasHeight - PADDING * 2,
       textPadding: PADDING,
     });
 
@@ -180,7 +171,7 @@ export class MainChart extends BaseChart {
           toCoords(i, y, {
             xRatio,
             yRatio,
-            dpiHeight: this.dpiHeight,
+            dpiHeight: this.canvasHeight,
             padding: PADDING,
             yMin,
           })
@@ -206,7 +197,7 @@ export class MainChart extends BaseChart {
   }
 
   clear() {
-    this.context.clearRect(0, 0, this.dpiWidth, this.dpiHeight);
+    this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
   }
 
   onPositionUpdate(position: number[]) {

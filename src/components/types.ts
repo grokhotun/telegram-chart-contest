@@ -9,6 +9,4 @@ export type Options = {
   theme: Theme;
   width: number;
   height: number;
-  canvasWidth: number;
-  canvasHeight: number;
 };

@@ -1,8 +1,6 @@
 import {
-  DPI_HEIGHT,
-  WIDTH,
-  HEIGHT,
-  DPI_WIDTH,
+  MAIN_CHART_WIDTH,
+  MAIN_CHART_HEIGHT,
   SLIDER_HEIGHT,
 } from '@/chart/constants';
 import { MainChart, SliderChart } from '@/components';
@@ -90,10 +88,8 @@ export class TelegramChart {
       root: this.chart,
       data: this.data,
       theme: this.theme,
-      width: WIDTH,
-      height: HEIGHT,
-      canvasWidth: DPI_WIDTH,
-      canvasHeight: DPI_HEIGHT,
+      width: MAIN_CHART_WIDTH,
+      height: MAIN_CHART_HEIGHT,
     });
 
     this.sliderChart = new SliderChart({
@@ -101,10 +97,8 @@ export class TelegramChart {
       root: this.slider,
       data: this.data,
       theme: this.theme,
-      width: DPI_WIDTH / 2,
+      width: MAIN_CHART_WIDTH,
       height: SLIDER_HEIGHT,
-      canvasWidth: DPI_WIDTH,
-      canvasHeight: SLIDER_HEIGHT * 2,
     });
 
     this.mainChart.init();
