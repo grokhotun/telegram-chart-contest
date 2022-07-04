@@ -8,7 +8,7 @@ import {
 import { MainChart, SliderChart } from '@/components';
 import { Label } from '@/components/Label';
 import { Store } from '@/core/Observer';
-import { theme } from '@/theme';
+import { Theme, theme as constantTheme, ThemeKeys } from '@/theme';
 import { ChartData, MappedChartData } from '@/types';
 import { mapData } from '@/utils';
 
@@ -17,6 +17,7 @@ import { template } from './template';
 type Options = {
   root: HTMLElement;
   data: ChartData;
+  theme?: Theme;
 };
 
 export class TelegramChart {
@@ -31,10 +32,12 @@ export class TelegramChart {
 
   private store: Store;
   private activeChart: string[];
+  private theme: Theme;
 
-  constructor({ root, data }: Options) {
+  constructor({ root, data, theme = constantTheme.light }: Options) {
     this.root = root;
     this.data = mapData(data);
+    this.theme = theme;
 
     this.handleMouseClick = this.handleMouseClick.bind(this);
     this.initChart = this.initChart.bind(this);
@@ -47,6 +50,10 @@ export class TelegramChart {
 
     this.store = {};
     this.activeChart = this.data.yAxis.map(({ name }) => name);
+  }
+
+  setTheme(themeKey: ThemeKeys) {
+    this.theme = constantTheme[themeKey];
   }
 
   private handleMouseClick(e: MouseEvent) {
@@ -69,7 +76,7 @@ export class TelegramChart {
       store: this.store,
       root: this.chart,
       data: this.data,
-      theme: theme.day,
+      theme: this.theme,
       width: WIDTH,
       height: HEIGHT,
       canvasWidth: DPI_WIDTH,
@@ -80,7 +87,7 @@ export class TelegramChart {
       store: this.store,
       root: this.slider,
       data: this.data,
-      theme: theme.day,
+      theme: this.theme,
       width: DPI_WIDTH / 2,
       height: SLIDER_HEIGHT,
       canvasWidth: DPI_WIDTH,

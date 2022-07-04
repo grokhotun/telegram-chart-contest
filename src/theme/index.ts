@@ -1,9 +1,10 @@
 export const theme = {
-  day: {
+  light: {
     font: 'normal 20px Helvetica,sans-serif',
     background: '#fff',
   },
-  night: { font: 'normal 20px Helvetica,sans-serif', background: '#e2e2e2' },
+  dark: { font: 'normal 20px Helvetica,sans-serif', background: '#e2e2e2' },
 };
 
-export type Theme = typeof theme[keyof typeof theme];
+export type ThemeKeys = keyof typeof theme;
+export type Theme = typeof theme[ThemeKeys];

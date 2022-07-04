@@ -219,6 +219,11 @@ h1 {
   justify-content: flex-start;
 }
 
+.theme-toggler {
+  padding: 5px 10px;
+  margin-bottom: 1em;
+}
+
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(230, 236, 240, 1);
