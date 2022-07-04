@@ -1,4 +1,4 @@
-import { DPI_WIDTH, Months } from '@/chart/constants';
+import { Months } from '@/chart/constants';
 import {
   ChartData,
   Column,
@@ -36,8 +36,18 @@ export function toCoords(
   return [xCoord, yCoord];
 }
 
-export function isOver(mouseX: number, x: number, length: number) {
-  const width = DPI_WIDTH / length;
+export function isOver({
+  mouseX,
+  x,
+  length,
+  canvasWidth,
+}: {
+  mouseX: number;
+  x: number;
+  length: number;
+  canvasWidth: number;
+}) {
+  const width = canvasWidth / length;
   return Math.abs(x - mouseX) < width / 2;
 }
 

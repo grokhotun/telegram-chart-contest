@@ -2,9 +2,6 @@ export const PADDING = 40;
 export const MAIN_CHART_WIDTH = 600;
 export const MAIN_CHART_HEIGHT = 200;
 
-export const DPI_WIDTH = MAIN_CHART_WIDTH * 2;
-export const DPI_HEIGHT = MAIN_CHART_HEIGHT * 2;
-
 export const ROWS_COUNT = 5;
 export const LABELS_COUNT = 6;
 export const CIRCLE_RADIUS = 8;

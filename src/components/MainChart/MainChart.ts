@@ -1,9 +1,8 @@
-import { DPI_HEIGHT, LABELS_COUNT, PADDING } from '@/chart/constants';
+import { LABELS_COUNT, PADDING } from '@/chart/constants';
 import { BaseChart } from '@/components/BaseChart';
 import {
   computeXRatio,
   computeYRatio,
-  css,
   toCoords,
   toDate,
   isEven,
@@ -69,16 +68,21 @@ export class MainChart extends BaseChart {
       const text = toDate(coord);
 
       if (isEven(idx, step)) {
-        this.context.fillText(text, xCoord, DPI_HEIGHT - 10);
+        this.context.fillText(text, xCoord, this.canvasHeight - 10);
       }
 
       if (
         this.proxy.mouse.x &&
-        isOver(this.proxy.mouse.x, xCoord, xCoords.length)
+        isOver({
+          mouseX: this.proxy.mouse.x,
+          x: xCoord,
+          length: xCoords.length,
+          canvasWidth: this.canvasWidth,
+        })
       ) {
         this.context.save();
         this.context.moveTo(xCoord, PADDING / 2);
-        this.context.lineTo(xCoord, DPI_HEIGHT - PADDING);
+        this.context.lineTo(xCoord, this.canvasHeight - PADDING);
         this.context.restore();
 
         if (this.proxy.mouse.tooltip.top && this.proxy.mouse.tooltip.left) {
@@ -180,7 +184,12 @@ export class MainChart extends BaseChart {
         for (const [x, y] of coords) {
           if (
             this.proxy.mouse.x &&
-            isOver(this.proxy.mouse.x, x, coords.length)
+            isOver({
+              mouseX: this.proxy.mouse.x,
+              x,
+              length: coords.length,
+              canvasWidth: this.canvasWidth,
+            })
           ) {
             this.draw.drawCircle([x, y], color);
           }
