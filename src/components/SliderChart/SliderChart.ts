@@ -152,6 +152,8 @@ export class SliderChart extends BaseChart {
     });
   }
 
+  update(activeCharts: string[]) {}
+
   render() {
     const [yMin, yMax] = computeBoundaries({ yAxis: this.data.yAxis });
     const yRatio = computeYRatio(this.canvasHeight, yMax, yMin);

@@ -13,6 +13,7 @@ export function template() {
           <div class="telegram-chart-slider__arrow--right" data-element="arrow" data-type="right"></div>
         </div>
       </div>
+      <div class="telegram-chart-labels" data-element="labels"></div>
     </div>
   `;
 }

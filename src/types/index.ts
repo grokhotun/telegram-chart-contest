@@ -37,4 +37,5 @@ export type MouseProxy = {
     };
   };
   position: number[] | null;
+  activeChart: string[];
 };

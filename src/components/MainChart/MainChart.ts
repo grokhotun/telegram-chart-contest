@@ -41,6 +41,7 @@ export class MainChart extends BaseChart {
           },
         },
         position: null,
+        activeChart: this.activeCharts,
       },
       {
         set: (...args) => {
@@ -67,6 +68,10 @@ export class MainChart extends BaseChart {
 
     this.canvas.width = this.dpiWidth;
     this.canvas.height = this.dpiHeight;
+  }
+
+  get activeCharts() {
+    return this.data.yAxis.map(({ name }) => name);
   }
 
   drawXAxis({ data, xRatio }: { data: MappedChartData; xRatio: number }) {
@@ -137,11 +142,18 @@ export class MainChart extends BaseChart {
     };
   }
 
+  update(activeChart: string[]) {
+    this.proxy.activeChart = activeChart;
+  }
+
   render() {
     this.clear();
     const calculatedData = this.calculateOffsetCoords();
+    const activeCharts = calculatedData.yAxis.filter(({ name }) =>
+      this.proxy.activeChart.includes(name)
+    );
 
-    const [yMin, yMax] = computeBoundaries({ yAxis: calculatedData.yAxis });
+    const [yMin, yMax] = computeBoundaries({ yAxis: activeCharts });
     const yRatio = computeYRatio(this.viewHeight, yMax, yMin);
     const xRatio = computeXRatio(
       this.viewWidth,
@@ -161,7 +173,7 @@ export class MainChart extends BaseChart {
       xRatio,
     });
 
-    calculatedData.yAxis
+    activeCharts
       .map(({ color, coords: initialCoords }) => {
         const coords = initialCoords.map((y, i) =>
           toCoords(i, y, {

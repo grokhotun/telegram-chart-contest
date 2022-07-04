@@ -90,6 +90,8 @@ h1 {
       background: transparent;
       top: 0;
       bottom: 0;
+      border-top: 1px solid #ddeaf3;
+      border-bottom: 1px solid #ddeaf3;
     }
   }
 
@@ -210,6 +212,11 @@ h1 {
       animation-duration: 1.3s;
     }
   }
+}
+
+.telegram-chart-labels {
+  display: flex;
+  justify-content: flex-start;
 }
 
 @keyframes pulse {
