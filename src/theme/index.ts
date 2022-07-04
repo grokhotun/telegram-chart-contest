@@ -12,7 +12,7 @@ export const theme = {
     checkboxColor: '#000',
     tooltipBackground: '#fff',
     tooltipBorder: '#dfe6eb',
-    tooltipShadow: '1px 1px 1px rgba(0, 0, 0, .05)',
+    tooltipShadow: '1px 1px 1px rgba(0, 0, 0, 0.05)',
     tooltipTextColor: '#000',
   },
   dark: {
@@ -28,7 +28,7 @@ export const theme = {
     checkboxColor: '#fff',
     tooltipBackground: '#253241',
     tooltipBorder: '#253241',
-    tooltipShadow: '1px 1px 1px rgba(0, 0, 0, .5)',
+    tooltipShadow: '1px 1px 1px rgba(0, 0, 0, 0.3)',
     tooltipTextColor: '#fff',
   },
 };

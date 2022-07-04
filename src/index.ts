@@ -54,6 +54,7 @@ document.querySelector('#theme-toggler')!.addEventListener('click', (e) => {
   const v = buttonText[key];
 
   document.body.classList.toggle('dark-mode');
+  e.target.classList.toggle('dark-mode');
   e.target.textContent = v.text;
   e.target.setAttribute('data-theme', v.value);
 

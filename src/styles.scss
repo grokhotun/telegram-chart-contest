@@ -21,6 +21,11 @@ body {
     .title {
       color: #fff;
     }
+
+    .theme-toggler {
+      color: #242f3e;
+      background-color: #fff;
+    }
   }
 }
 
@@ -234,8 +239,15 @@ body {
 }
 
 .theme-toggler {
-  padding: 5px 10px;
+  box-shadow: none;
+  border: none;
+  color: #fff;
+  background-color: #242f3e;
+  padding: 10px 15px;
+  border-radius: 10px;
   margin-bottom: 1em;
+  transition: color 0.5 ease-in-out;
+  transition: background-color 0.5 ease-in-out;
 }
 
 @keyframes pulse {
