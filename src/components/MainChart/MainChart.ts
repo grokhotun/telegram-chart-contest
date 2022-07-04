@@ -52,14 +52,6 @@ export class MainChart extends BaseChart {
     this.tooltip = new Tooltip(
       this.root.querySelector('[data-element="tooltip"]') as HTMLElement
     );
-
-    css(this.canvas, {
-      width: `${this.width}px`,
-      height: `${this.height}px`,
-    });
-
-    this.canvas.width = this.canvasWidth;
-    this.canvas.height = this.canvasHeight;
   }
 
   get activeCharts() {
