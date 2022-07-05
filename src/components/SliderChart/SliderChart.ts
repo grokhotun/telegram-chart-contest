@@ -165,7 +165,7 @@ export class SliderChart extends BaseChart {
   update(activeCharts: string[]) {}
 
   render() {
-    const [yMin, yMax] = computeBoundaries({ yAxis: this.data.yAxis });
+    const [yMin, yMax] = computeBoundaries(this.data.yAxis);
     const yRatio = computeYRatio(this.canvasHeight, yMax, yMin);
     const xRatio = computeXRatio(
       this.canvasWidth,

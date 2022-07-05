@@ -37,7 +37,7 @@ export class MainChart extends BaseChart {
           },
         },
         position: null,
-        activeChart: this.activeCharts,
+        activeChart: this.data.yAxis.map(({ name }) => name),
       },
       {
         set: (...args) => {
@@ -54,10 +54,12 @@ export class MainChart extends BaseChart {
   }
 
   get activeCharts() {
-    return this.data.yAxis.map(({ name }) => name);
+    return this.offsetData.yAxis.filter(({ name }) =>
+      this.proxy.activeChart.includes(name)
+    );
   }
 
-  drawXAxis({ data, xRatio }: { data: MappedChartData; xRatio: number }) {
+  xAxis({ data, xRatio }: { data: MappedChartData; xRatio: number }) {
     const xCoords = data.xAxis.coords;
     const step = Math.round(xCoords.length / LABELS_COUNT);
 
@@ -108,11 +110,8 @@ export class MainChart extends BaseChart {
     this.context.closePath();
   }
 
-  calculateOffsetCoords() {
-    if (!this.proxy.position)
-      return {
-        ...this.data,
-      };
+  get offsetData() {
+    if (!this.proxy.position) return this.data;
 
     const dataAmount = this.data.xAxis.coords.length;
     const leftIndex = Math.round((dataAmount * this.proxy.position[0]) / 100);
@@ -136,16 +135,12 @@ export class MainChart extends BaseChart {
 
   render() {
     this.clear();
-    const calculatedData = this.calculateOffsetCoords();
-    const activeCharts = calculatedData.yAxis.filter(({ name }) =>
-      this.proxy.activeChart.includes(name)
-    );
 
-    const [yMin, yMax] = computeBoundaries({ yAxis: activeCharts });
+    const [yMin, yMax] = computeBoundaries(this.activeCharts);
     const yRatio = computeYRatio(this.canvasHeight - PADDING * 2, yMax, yMin);
     const xRatio = computeXRatio(
       this.canvasWidth,
-      calculatedData.xAxis.coords.length
+      this.offsetData.xAxis.coords.length
     );
 
     this.draw.yAxis({
@@ -156,12 +151,12 @@ export class MainChart extends BaseChart {
       textPadding: PADDING,
     });
 
-    this.drawXAxis({
-      data: calculatedData,
+    this.xAxis({
+      data: this.offsetData,
       xRatio,
     });
 
-    activeCharts
+    this.activeCharts
       .map(({ color, coords: initialCoords }) => {
         const coords = initialCoords.map((y, i) =>
           toCoords(i, y, {
