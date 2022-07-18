@@ -65,10 +65,11 @@ export class Tooltip {
           ${content
             .map(
               ({ color, value, name }) => `
-              <li class="tooltip-list-item">
-                <div class="value" style="color: ${color}">${value}</div>
-                <div class="name" style="color: ${color}">${name}</div>
-              </li>`
+                <li class="tooltip-list-item">
+                  <div class="value" style="color: ${color}">${value}</div>
+                  <div class="name" style="color: ${color}">${name}</div>
+                </li>
+              `
             )
             .join('\n')}
         </ul>
