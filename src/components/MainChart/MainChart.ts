@@ -19,6 +19,7 @@ export class MainChart extends BaseChart {
   private raf: number;
   private readonly proxy: MouseProxy;
   private readonly tooltip: Tooltip;
+  private prevMax: number | null = null;
 
   constructor(options: Options) {
     super(options);
@@ -38,6 +39,7 @@ export class MainChart extends BaseChart {
         },
         position: null,
         activeChart: this.data.yAxis.map(({ name }) => name),
+        max: null,
       },
       {
         set: (...args) => {
@@ -59,11 +61,21 @@ export class MainChart extends BaseChart {
     );
   }
 
-  xAxis({ data, xRatio }: { data: MappedChartData; xRatio: number }) {
+  xAxis({
+    data,
+    xRatio,
+    translate,
+  }: {
+    data: MappedChartData;
+    xRatio: number;
+    translate: number;
+  }) {
     const xCoords = data.xAxis.coords;
     const step = Math.round(xCoords.length / LABELS_COUNT);
 
     this.context.beginPath();
+    this.context.save();
+    this.context.translate(translate, 0);
 
     xCoords.forEach((coord, idx) => {
       const xCoord = (idx + 1) * xRatio;
@@ -80,6 +92,7 @@ export class MainChart extends BaseChart {
           x: xCoord,
           length: xCoords.length,
           canvasWidth: this.canvasWidth,
+          translate,
         })
       ) {
         this.context.save();
@@ -107,6 +120,7 @@ export class MainChart extends BaseChart {
     });
 
     this.context.stroke();
+    this.context.restore();
     this.context.closePath();
   }
 
@@ -133,14 +147,46 @@ export class MainChart extends BaseChart {
     this.proxy.activeChart = activeChart;
   }
 
+  translate(xRatio: number, left: number, length: number) {
+    return -1 * Math.round((left * length * xRatio) / 100);
+  }
+
+  getMax(yMax: number) {
+    const step = (yMax - this.prevMax!) / 500;
+
+    if (this.proxy.max! < yMax) {
+      this.proxy.max! += step;
+    } else if (this.proxy.max! > yMax) {
+      this.proxy.max = yMax;
+      this.prevMax = yMax;
+    }
+
+    return this.proxy.max as number;
+  }
+
   render() {
     this.clear();
 
-    const [yMin, yMax] = computeBoundaries(this.activeCharts);
-    const yRatio = computeYRatio(this.canvasHeight - PADDING * 2, yMax, yMin);
+    const [yMin, yMax] = computeBoundaries(this.offsetData.yAxis);
+
+    if (!this.prevMax) {
+      this.prevMax = yMax;
+      this.proxy.max = yMax;
+    }
+
+    const max = this.getMax(yMax);
+
+    const yRatio = computeYRatio(this.canvasHeight - PADDING * 2, max, yMin);
     const xRatio = computeXRatio(
       this.canvasWidth,
       this.offsetData.xAxis.coords.length
+    );
+
+    const left = this.proxy.position ? this.proxy.position[0] : 0;
+    const translate = this.translate(
+      xRatio,
+      left,
+      this.data.xAxis.coords.length
     );
 
     this.draw.yAxis({
@@ -152,11 +198,12 @@ export class MainChart extends BaseChart {
     });
 
     this.xAxis({
-      data: this.offsetData,
+      data: this.data,
       xRatio,
+      translate,
     });
 
-    this.activeCharts
+    this.data.yAxis
       .map(({ color, coords: initialCoords }) => {
         const coords = initialCoords.map((y, i) =>
           toCoords(i, y, {
@@ -174,7 +221,7 @@ export class MainChart extends BaseChart {
         };
       })
       .forEach(({ color, coords }) => {
-        this.draw.drawLine(coords, color);
+        this.draw.drawLine(coords, { color, translate });
 
         for (const [x, y] of coords) {
           if (
@@ -184,9 +231,10 @@ export class MainChart extends BaseChart {
               x,
               length: coords.length,
               canvasWidth: this.canvasWidth,
+              translate,
             })
           ) {
-            this.draw.drawCircle([x, y], color);
+            this.draw.drawCircle([x, y], { color, translate });
           }
         }
       });

@@ -190,7 +190,7 @@ export class SliderChart extends BaseChart {
         };
       })
       .forEach(({ color, coords }) => {
-        this.draw.drawLine(coords, color);
+        this.draw.drawLine(coords, { color });
       });
   }
 

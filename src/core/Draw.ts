@@ -14,9 +14,14 @@ export class Draw {
     this.theme = theme;
   }
 
-  drawLine(coords: number[][], color: string) {
+  drawLine(
+    coords: number[][],
+    { color, translate }: { color: string; translate?: number }
+  ) {
     this.context.beginPath();
+    this.context.save();
     this.context.lineWidth = this.theme.yLinesWidth;
+    this.context.translate(translate ?? 0, 0);
     this.context.strokeStyle = color;
 
     for (const [x, y] of coords) {
@@ -24,15 +29,22 @@ export class Draw {
     }
 
     this.context.stroke();
+    this.context.restore();
     this.context.closePath();
   }
 
-  drawCircle([x, y]: number[], color: string) {
+  drawCircle(
+    [x, y]: number[],
+    { color, translate }: { color: string; translate?: number }
+  ) {
     this.context.beginPath();
+    this.context.save();
+    this.context.translate(translate ?? 0, 0);
     this.context.strokeStyle = color;
     this.context.fillStyle = this.theme.chartBackground;
     this.context.arc(x, y, CIRCLE_RADIUS, 0, Math.PI * 2);
     this.context.fill();
+    this.context.restore();
     this.context.stroke();
     this.context.closePath();
   }

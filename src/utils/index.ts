@@ -41,14 +41,16 @@ export function isOver({
   x,
   length,
   canvasWidth,
+  translate,
 }: {
   mouseX: number;
   x: number;
   length: number;
   canvasWidth: number;
+  translate: number;
 }) {
   const width = canvasWidth / length;
-  return Math.abs(x - mouseX) < width / 2;
+  return Math.abs(x - (mouseX + Math.abs(translate))) < width / 2;
 }
 
 export function isEven(v: number, divider = 2) {
