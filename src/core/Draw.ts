@@ -52,15 +52,15 @@ export class Draw {
   yAxis({
     yMin,
     yMax,
-    dpiWidth,
-    viewHeight,
+    canvasWidth,
+    canvasHeight,
     textPadding,
     rowsCount = ROWS_COUNT,
   }: {
     yMin: number;
     yMax: number;
-    dpiWidth: number;
-    viewHeight: number;
+    canvasWidth: number;
+    canvasHeight: number;
     textPadding: number;
     rowsCount?: number;
   }) {
@@ -74,12 +74,12 @@ export class Draw {
     this.context.fillStyle = this.theme.chartTextColor;
 
     for (let i = 1; i <= rowsCount; i++) {
-      const y = (viewHeight / rowsCount) * i;
+      const y = (canvasHeight / rowsCount) * i;
       const text = Math.round(yMax - textStep * i);
 
       this.context.fillText(`${text}`, 5, y + textPadding - 10);
       this.context.moveTo(0, y + textPadding);
-      this.context.lineTo(dpiWidth, y + textPadding);
+      this.context.lineTo(canvasWidth, y + textPadding);
     }
 
     this.context.stroke();

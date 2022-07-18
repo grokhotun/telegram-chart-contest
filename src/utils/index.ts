@@ -19,11 +19,11 @@ export function toCoords(
   {
     xRatio,
     yRatio,
-    dpiHeight,
+    canvasHeight,
     padding,
     yMin,
   }: {
-    dpiHeight: number;
+    canvasHeight: number;
     padding: number;
     xRatio: number;
     yRatio: number;
@@ -31,7 +31,7 @@ export function toCoords(
   }
 ) {
   const xCoord = Math.floor(x * xRatio);
-  const yCoord = Math.floor(dpiHeight - padding - (y - yMin) / yRatio);
+  const yCoord = Math.floor(canvasHeight - padding - (y - yMin) / yRatio);
 
   return [xCoord, yCoord];
 }
@@ -68,8 +68,8 @@ export function computeXRatio(width: number, length: number) {
   return width / (length - 1);
 }
 
-export function computeYRatio(height: number, max: number, min: number) {
-  return (max - min) / height;
+export function computeYRatio(canvasHeight: number, max: number, min: number) {
+  return (max - min) / canvasHeight;
 }
 
 function isNumber(v: number | string): v is number {

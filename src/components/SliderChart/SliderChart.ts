@@ -178,7 +178,7 @@ export class SliderChart extends BaseChart {
           toCoords(i, y, {
             xRatio,
             yRatio,
-            dpiHeight: this.canvasHeight,
+            canvasHeight: this.canvasHeight,
             padding: -5,
             yMin,
           })

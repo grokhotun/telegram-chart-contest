@@ -1,4 +1,4 @@
-import { LABELS_COUNT, PADDING } from '@/chart/constants';
+import { ANIMATION_SPEED, LABELS_COUNT, PADDING } from '@/chart/constants';
 import { BaseChart } from '@/components/BaseChart';
 import {
   computeXRatio,
@@ -20,6 +20,7 @@ export class MainChart extends BaseChart {
   private readonly proxy: MouseProxy;
   private readonly tooltip: Tooltip;
   private prevMax: number | null = null;
+  private delta: number | null = null;
 
   constructor(options: Options) {
     super(options);
@@ -147,53 +148,59 @@ export class MainChart extends BaseChart {
     this.proxy.activeChart = activeChart;
   }
 
-  translate(xRatio: number, left: number, length: number) {
-    return -1 * Math.round((left * length * xRatio) / 100);
+  translate(xRatio: number) {
+    if (!this.proxy.position) return 0;
+
+    return (
+      -1 *
+      Math.round(
+        (this.proxy.position[0] * this.data.xAxis.coords.length * xRatio) / 100
+      )
+    );
   }
 
-  getMax(yMax: number) {
-    const step = (yMax - this.prevMax!) / 500;
+  computeAnimation(yMax: number) {
+    if (!this.prevMax || !this.proxy.max) {
+      this.prevMax = yMax;
+      this.proxy.max = yMax;
+    }
 
-    if (this.proxy.max! < yMax) {
-      this.proxy.max! += step;
-    } else if (this.proxy.max! > yMax) {
+    const step = (yMax - this.prevMax) / ANIMATION_SPEED;
+
+    if (this.proxy.max < yMax) {
+      this.proxy.max += step;
+    } else if (this.proxy.max > yMax) {
       this.proxy.max = yMax;
       this.prevMax = yMax;
     }
 
-    return this.proxy.max as number;
+    return this.proxy.max;
   }
 
   render() {
     this.clear();
 
     const [yMin, yMax] = computeBoundaries(this.offsetData.yAxis);
+    const computedYMax = this.computeAnimation(yMax);
 
-    if (!this.prevMax) {
-      this.prevMax = yMax;
-      this.proxy.max = yMax;
-    }
+    const yRatio = computeYRatio(
+      this.canvasHeight - PADDING * 2,
+      computedYMax,
+      yMin
+    );
 
-    const max = this.getMax(yMax);
-
-    const yRatio = computeYRatio(this.canvasHeight - PADDING * 2, max, yMin);
     const xRatio = computeXRatio(
       this.canvasWidth,
       this.offsetData.xAxis.coords.length
     );
 
-    const left = this.proxy.position ? this.proxy.position[0] : 0;
-    const translate = this.translate(
-      xRatio,
-      left,
-      this.data.xAxis.coords.length
-    );
+    const translate = this.translate(xRatio);
 
     this.draw.yAxis({
       yMin,
       yMax,
-      dpiWidth: this.canvasWidth,
-      viewHeight: this.canvasHeight - PADDING * 2,
+      canvasWidth: this.canvasWidth,
+      canvasHeight: this.canvasHeight - PADDING * 2,
       textPadding: PADDING,
     });
 
@@ -209,7 +216,7 @@ export class MainChart extends BaseChart {
           toCoords(i, y, {
             xRatio,
             yRatio,
-            dpiHeight: this.canvasHeight,
+            canvasHeight: this.canvasHeight,
             padding: PADDING,
             yMin,
           })

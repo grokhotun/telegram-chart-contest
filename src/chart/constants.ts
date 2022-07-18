@@ -1,6 +1,7 @@
 export const PADDING = 40;
 export const MAIN_CHART_WIDTH = 600;
 export const MAIN_CHART_HEIGHT = 200;
+export const ANIMATION_SPEED = 1000; // ms
 
 export const ROWS_COUNT = 5;
 export const LABELS_COUNT = 6;
