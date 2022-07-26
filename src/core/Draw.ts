@@ -44,8 +44,8 @@ export class Draw {
     this.context.fillStyle = this.theme.chartBackground;
     this.context.arc(x, y, CIRCLE_RADIUS, 0, Math.PI * 2);
     this.context.fill();
-    this.context.restore();
     this.context.stroke();
+    this.context.restore();
     this.context.closePath();
   }
 

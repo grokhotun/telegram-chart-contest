@@ -159,19 +159,34 @@ export class MainChart extends BaseChart {
     );
   }
 
-  computeAnimation(yMax: number) {
-    if (!this.prevMax || !this.proxy.max) {
-      this.prevMax = yMax;
+  computeDelta({ yMax, yMin }: { yMax: number; yMin: number }) {
+    const delta = yMax - (this.proxy.max ?? 0);
+    return Math.abs(delta) > (yMax - yMin) / ANIMATION_SPEED
+      ? delta / ANIMATION_SPEED
+      : delta;
+  }
+
+  computeAnimation(yMax: number, yMin: number) {
+    if (!this.proxy.max) {
       this.proxy.max = yMax;
     }
 
-    const step = (yMax - this.prevMax) / ANIMATION_SPEED;
+    if (!this.delta && this.proxy.max !== yMax) {
+      this.delta = this.computeDelta({ yMax, yMin });
+    }
 
-    if (this.proxy.max < yMax) {
-      this.proxy.max += step;
-    } else if (this.proxy.max > yMax) {
-      this.proxy.max = yMax;
-      this.prevMax = yMax;
+    if (this.delta! > 0) {
+      this.proxy.max += this.delta!;
+      if (this.proxy.max > yMax) {
+        this.proxy.max = yMax;
+        this.delta = null;
+      }
+    } else if (this.delta! < 0) {
+      this.proxy.max += this.delta!;
+      if (this.proxy.max < yMax) {
+        this.proxy.max = yMax;
+        this.delta = null;
+      }
     }
 
     return this.proxy.max;
@@ -181,7 +196,7 @@ export class MainChart extends BaseChart {
     this.clear();
 
     const [yMin, yMax] = computeBoundaries(this.offsetData.yAxis);
-    const computedYMax = this.computeAnimation(yMax);
+    const computedYMax = this.computeAnimation(yMax, yMin);
 
     const yRatio = computeYRatio(
       this.canvasHeight - PADDING * 2,
